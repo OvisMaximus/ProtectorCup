@@ -18,12 +18,14 @@ lMount = 10;
 wMount = 14;
 hMount = 10;
 
-hSwitchSocket = 44;
+hSwitchSocket = 22;
 wSwitchSocket = 10; // guess
 lSwitchSocket = 2;//guess
 hSwitch = 7.5;
 wSwitch = 4;//guess
 lSwitch = 4;//guess
+hSwitchSocketPosition = 16; // guess
+aSwitchSocketPosition = 0; //guess
 
 
 module endOfParameters() {};
@@ -48,11 +50,25 @@ module mount(aHorizontal) {
             cube([lMountWithBridgeToMotor, wMount, hMount]);
 }
 
+module switch() {
+    lBridgeToMotor = lSwitchSocket;
+    module socketWithLever() {
+        lSocketModel = lBridgeToMotor + lSwitchSocket;
+        cube([lSocketModel, wSwitchSocket, hSwitchSocket]);
+        translate([lSocketModel - cadFix,
+                (wSwitchSocket - wSwitch) / 2, (hSwitchSocket - hSwitch) / 2])
+            cube([lSwitch + cadFix, wSwitch, hSwitch]);
+    }
+
+    translate([dMotor / 2 - lBridgeToMotor, - wSwitchSocket / 2, hSwitchSocketPosition])
+        socketWithLever();
+}
+
 module motor() {
     cylinder(hMotor, d = dMotor);
     mount(90);
     mount(- 90);
-    //    switch();
+    switch();
 }
 
 module gap() {
