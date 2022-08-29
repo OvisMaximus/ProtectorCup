@@ -3,8 +3,8 @@ hMotor = 57;
 
 dGap = 44.4;
 hGap = 23;
-wGapClamp = 12; // guess
-hGapClampOverlap = 22; // guess
+wGapClamp = 11;
+hGapClampOverlap = 12.7;
 
 dBattery = 40.7;
 hBattery = 78;
@@ -21,13 +21,13 @@ wMount = 14;
 hMount = 10;
 
 hSwitchSocket = 22;
-wSwitchSocket = 10; // guess
-lSwitchSocket = 2;//guess
-hSwitch = 7.5;
-wSwitch = 4;//guess
-lSwitch = 4;//guess
-hSwitchSocketPosition = 16; // guess
-aSwitchSocketPosition = 0; //guess
+wSwitchSocket = 9.8;
+lSwitchSocket = 1.5;
+hSwitch = 7.6;
+wSwitch = 3.7;
+lSwitch = 2.6;
+hSwitchSocketPosition = 11.6;
+aSwitchSocketPosition = 0;
 
 
 module endOfParameters() {};
