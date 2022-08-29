@@ -62,14 +62,15 @@ module switch() {
             cube([lSwitch + cadFix, wSwitch, hSwitch]);
     }
 
+    rotate([0, 0, 90])
     translate([dMotor / 2 - lBridgeToMotor, - wSwitchSocket / 2, hSwitchSocketPosition])
         socketWithLever();
 }
 
 module motor() {
     cylinder(hMotor, d = dMotor);
-    mount(90);
-    mount(- 90);
+    mount(0);
+    mount(- 180);
     switch();
 }
 
@@ -119,12 +120,9 @@ module hanger() {
 
 module mirrorBallMotor() {
     motor();
-    lift(hMotor)
-    gap();
-    lift(hMotor + hGap)
-    battery();
-    lift(hMotor + hGap + hBattery)
-    hanger();
+    lift(hMotor) gap();
+    lift(hMotor + hGap) battery();
+    lift(hMotor + hGap + hBattery) hanger();
 }
 
 mirrorBallMotor();
