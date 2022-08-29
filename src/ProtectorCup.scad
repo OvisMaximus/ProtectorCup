@@ -1,6 +1,6 @@
 use <MotorModel.scad>
 
-renderMode = 0; //[0:render, 1: cutoff -X, 2: cuttof -Y]
+renderMode = 0; //[0:render, 1: cutoff -X, 2: cuttof -Y, 3: collisions]
 
 hMirrorBallRotator = 180;
 
@@ -55,19 +55,34 @@ module hangSlot() {
     translate([xSlot / - 2, ySlot / - 2, hCupHollow])
         cube([xSlot, ySlot, lWall + 2 * cadFix]);
 }
-difference() {
-    cup();
-    tubeBore();
-    hangSlot();
-    if (renderMode == 1) {
-        translate([- 2 * dCup, - dCup, - dCup * .5])
-            cube([2 * dCup, 2 * dCup, 2 * hCup]);
-    }
-    if (renderMode == 2) {
-        translate([- dCup, - 2 * dCup, - dCup * .5])
-            cube([2 * dCup, 2 * dCup, 2 * hCup]);
+
+module protectorCup() {
+    difference() {
+        cup();
+        tubeBore();
+        hangSlot();
+        if (renderMode == 1) {
+            translate([- 2 * dCup, - dCup, - dCup * .5])
+                cube([2 * dCup, 2 * dCup, 2 * hCup]);
+        }
+        if (renderMode == 2) {
+            translate([- dCup, - 2 * dCup, - dCup * .5])
+                cube([2 * dCup, 2 * dCup, 2 * hCup]);
+        }
     }
 }
 if(renderMode != 0) {
-    color("blue", 0.2 ) mirrorBallMotor();
+//    color("blue", 0.2 ) mirrorBallMotor();
+}
+if(renderMode == 3) {
+    color("grey", 0.2)
+        protectorCup();
+    color("red", 0.5)
+        intersection () {
+          //  protectorCup();
+          //  mirrorBallMotor();
+            cube([30,30,5]);
+        }
+} else {
+    protectorCup();
 }
