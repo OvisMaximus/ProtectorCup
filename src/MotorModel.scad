@@ -39,10 +39,17 @@ module lift(h) {
 
 $fn = 120;
 
+module mount(lDistanceFromCenter, aHorizontal) {
+    lBridgeToMotor = lMount;
+    lMountWithBridgeToMotor = lMount + lBridgeToMotor;
+    rotate([0, 0, aHorizontal])
+        translate([lDistanceFromCenter - lBridgeToMotor, -wMount / 2, 0])
+            cube([lMountWithBridgeToMotor, wMount, hMount]);
+}
 
 module motor(){
     cylinder(hMotor, d=dMotor);
-    mount(-dMotor/2, 90);
+    mount(dMotor/2, 90);
     mount(dMotor/2, -90);
 }
 
