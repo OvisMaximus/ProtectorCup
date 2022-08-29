@@ -1,7 +1,7 @@
 dMotor = 47.5;
 hMotor = 57;
 
-dGap= 44.4;
+dGap = 44.4;
 hGap = 23;
 
 dBattery = 40.7;
@@ -22,8 +22,8 @@ hSwitchSocket = 44;
 wSwitchSocket = 10; // guess
 lSwitchSocket = 2;//guess
 hSwitch = 7.5;
-wSwitch =4;//guess
-lSwitch =4;//guess
+wSwitch = 4;//guess
+lSwitch = 4;//guess
 
 
 module endOfParameters() {};
@@ -39,61 +39,63 @@ module lift(h) {
 
 $fn = 120;
 
-module mount(lDistanceFromCenter, aHorizontal) {
+module mount(aHorizontal) {
+    lDistanceFromCenter = dMotor / 2;
     lBridgeToMotor = lMount;
     lMountWithBridgeToMotor = lMount + lBridgeToMotor;
     rotate([0, 0, aHorizontal])
-        translate([lDistanceFromCenter - lBridgeToMotor, -wMount / 2, 0])
+        translate([lDistanceFromCenter - lBridgeToMotor, - wMount / 2, 0])
             cube([lMountWithBridgeToMotor, wMount, hMount]);
 }
 
-module motor(){
-    cylinder(hMotor, d=dMotor);
-    mount(dMotor/2, 90);
-    mount(dMotor/2, -90);
+module motor() {
+    cylinder(hMotor, d = dMotor);
+    mount(90);
+    mount(- 90);
+    //    switch();
 }
 
 module gap() {
-    cadOffset() cylinder(hGap + 2* cadFix, d=dGap);
+    cadOffset() cylinder(hGap + 2 * cadFix, d = dGap);
 }
 
 module battery() {
-    cylinder(hBattery, d=dBattery);
+    cylinder(hBattery, d = dBattery);
 
 }
 
 module hanger() {
     shape = [
-            [0,0],
-            [0,hHangerOverlap+hHangerHor],
-            [(wHanger-wHangerEar)/2, hHangerOverlap + hHangerHor],
-            [(wHanger-wHangerEar)/2, hHangerOverlap + hHanger],
-            [(wHanger+wHangerEar)/2, hHangerOverlap + hHanger],
-            [(wHanger+wHangerEar)/2, hHangerOverlap + hHangerHor],
-            [wHanger,hHangerOverlap+hHangerHor],
-            [wHanger,0],
-            [wHanger-dHanger,0],
-            [wHanger-dHanger,hHangerOverlap+hHangerHor-dHanger],
-            [(wHanger+wHangerEar)/2-dHanger, hHangerOverlap + hHangerHor-dHanger],
-            [(wHanger+wHangerEar)/2-dHanger, hHangerOverlap + hHanger-dHanger],
-            [(wHanger-wHangerEar)/2+dHanger, hHangerOverlap + hHanger-dHanger],
-            [(wHanger-wHangerEar)/2+dHanger, hHangerOverlap + hHangerHor-dHanger],
-            [dHanger,hHangerOverlap+hHangerHor-dHanger],
-            [dHanger,0]
+            [0, 0],
+            [0, hHangerOverlap + hHangerHor],
+            [(wHanger - wHangerEar) / 2, hHangerOverlap + hHangerHor],
+            [(wHanger - wHangerEar) / 2, hHangerOverlap + hHanger],
+            [(wHanger + wHangerEar) / 2, hHangerOverlap + hHanger],
+            [(wHanger + wHangerEar) / 2, hHangerOverlap + hHangerHor],
+            [wHanger, hHangerOverlap + hHangerHor],
+            [wHanger, 0],
+            [wHanger - dHanger, 0],
+            [wHanger - dHanger, hHangerOverlap + hHangerHor - dHanger],
+            [(wHanger + wHangerEar) / 2 - dHanger, hHangerOverlap + hHangerHor - dHanger],
+            [(wHanger + wHangerEar) / 2 - dHanger, hHangerOverlap + hHanger - dHanger],
+            [(wHanger - wHangerEar) / 2 + dHanger, hHangerOverlap + hHanger - dHanger],
+            [(wHanger - wHangerEar) / 2 + dHanger, hHangerOverlap + hHangerHor - dHanger],
+            [dHanger, hHangerOverlap + hHangerHor - dHanger],
+            [dHanger, 0]
         ];
-    translate([-wHanger/2, dHanger/2,-hHangerOverlap])
-        rotate([90,0,0])
-        linear_extrude(dHanger){ polygon(shape); }
+    translate([- wHanger / 2, dHanger / 2, - hHangerOverlap])
+        rotate([90, 0, 0])
+            linear_extrude(dHanger) {polygon(shape);}
 }
 
-module mirrorBallMotor(){
+module mirrorBallMotor() {
     motor();
     lift(hMotor)
-        gap();
+    gap();
     lift(hMotor + hGap)
-        battery();
+    battery();
     lift(hMotor + hGap + hBattery)
-        hanger();
+    hanger();
 }
 
 mirrorBallMotor();
