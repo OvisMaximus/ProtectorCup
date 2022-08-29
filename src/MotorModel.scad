@@ -3,6 +3,8 @@ hMotor = 57;
 
 dGap = 44.4;
 hGap = 23;
+wGapClamp = 12; // guess
+hGapClampOverlap = 22; // guess
 
 dBattery = 40.7;
 hBattery = 78;
@@ -72,12 +74,23 @@ module motor() {
 }
 
 module gap() {
-    cadOffset() cylinder(hGap + 2 * cadFix, d = dGap);
+    hGapClampCad = hGap + hGapClampOverlap + 2 * cadFix;
+    lMask = dMotor;
+    wMask = dGap / 2;
+    hMask = hGapClampCad+ 2* cadFix;
+    cadOffset()
+        difference() {
+            cylinder(hGapClampCad, d = dGap);
+            cadOffset() cylinder(hGapClampCad , d = dBattery);
+            translate([-lMask/2, wGapClamp/2, -cadFix])
+                cube([lMask, wMask, hMask]);
+            translate([-lMask/2, - wGapClamp/2 -wMask, -cadFix])
+                cube([lMask, wMask, hMask]);
+        }
 }
 
 module battery() {
     cylinder(hBattery, d = dBattery);
-
 }
 
 module hanger() {
