@@ -10,7 +10,7 @@ dBattery = 40.7;
 hBattery = 78;
 
 hHanger = 21.2;
-hHangerHor = 12.3;
+hHangerHorizontal = 12.3;
 dHanger = 1.9;
 hHangerOverlap = 15;
 wHanger = 44.4;
@@ -29,12 +29,11 @@ lSwitch = 2.6;
 hSwitchSocketPosition = 11.6;
 aSwitchSocketPosition = 0;
 
-
 module endOfParameters() {};
 
 cadFix = 0.005;
-module cadOffset() {
-    translate([0, 0, - cadFix]) children();
+module cadOffset(n=1) {
+    translate([0, 0, - cadFix * n]) children();
 }
 
 module lift(h) {
@@ -97,20 +96,20 @@ module battery() {
 module hanger() {
     shape = [
             [0, 0],
-            [0, hHangerOverlap + hHangerHor],
-            [(wHanger - wHangerEar) / 2, hHangerOverlap + hHangerHor],
+            [0, hHangerOverlap + hHangerHorizontal],
+            [(wHanger - wHangerEar) / 2, hHangerOverlap + hHangerHorizontal],
             [(wHanger - wHangerEar) / 2, hHangerOverlap + hHanger],
             [(wHanger + wHangerEar) / 2, hHangerOverlap + hHanger],
-            [(wHanger + wHangerEar) / 2, hHangerOverlap + hHangerHor],
-            [wHanger, hHangerOverlap + hHangerHor],
+            [(wHanger + wHangerEar) / 2, hHangerOverlap + hHangerHorizontal],
+            [wHanger, hHangerOverlap + hHangerHorizontal],
             [wHanger, 0],
             [wHanger - dHanger, 0],
-            [wHanger - dHanger, hHangerOverlap + hHangerHor - dHanger],
-            [(wHanger + wHangerEar) / 2 - dHanger, hHangerOverlap + hHangerHor - dHanger],
+            [wHanger - dHanger, hHangerOverlap + hHangerHorizontal - dHanger],
+            [(wHanger + wHangerEar) / 2 - dHanger, hHangerOverlap + hHangerHorizontal - dHanger],
             [(wHanger + wHangerEar) / 2 - dHanger, hHangerOverlap + hHanger - dHanger],
             [(wHanger - wHangerEar) / 2 + dHanger, hHangerOverlap + hHanger - dHanger],
-            [(wHanger - wHangerEar) / 2 + dHanger, hHangerOverlap + hHangerHor - dHanger],
-            [dHanger, hHangerOverlap + hHangerHor - dHanger],
+            [(wHanger - wHangerEar) / 2 + dHanger, hHangerOverlap + hHangerHorizontal - dHanger],
+            [dHanger, hHangerOverlap + hHangerHorizontal - dHanger],
             [dHanger, 0]
         ];
     translate([- wHanger / 2, dHanger / 2, - hHangerOverlap])
@@ -125,4 +124,4 @@ module mirrorBallMotor() {
     lift(hMotor + hGap + hBattery) hanger();
 }
 
-mirrorBallMotor();
+//mirrorBallMotor();

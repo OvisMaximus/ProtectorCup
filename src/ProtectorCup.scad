@@ -1,33 +1,16 @@
-use <MotorModel.scad>
+include <MotorModel.scad>
 
 renderMode = 0; //[0:render, 1: cutoff -X, 2: cuttof -Y, 3: collisions]
 
-hMirrorBallRotator = 180;
-
-hHangerHorizontal = 12.24;
-hHanger = 21.2;
-wHangerEarGap = 8.9;
-dHanger = 1.9;
 dHangRing = 30;
 wHangRing = 3 ;
 
 dTube = 15;
 
-hBatteryHolder = 78;
-
-hGap = 23;
-
-hMotor = 57;
-dMotor = 47.5;
 lWall = 0.8;
 lSpace = 1.5;
 
 module endOfParameters() {};
-
-cadFix = 0.005;
-module cadOffset(n=1) {
-    translate([0, 0, - cadFix * n]) children();
-}
 
 $fn = 120;
 
@@ -36,11 +19,13 @@ CUTOFF_X = 1;
 CUTOFF_Y = 2;
 COLLISION = 3;
 
-wHangerEar = wHangerEarGap + 2 * dHanger;
 dCupHollow = dMotor + 2 * lSpace;
 dCup = dCupHollow + 2 * lWall;
-hCupHollow = hMotor + hGap + hBatteryHolder + hHanger - dHanger + dHangRing - wHangRing;
+hMotorHangPoint = hMotor + hGap + hBattery + hHanger - 2*dHanger;
+dHangRingInside = dHangRing - 2 *  wHangRing;
+hCupHollow = hMotorHangPoint + dHangRingInside + 3 * wHangRing;
 hCup = hCupHollow + lWall;
+zTube = hCupHollow - 2.5 * wHangRing - dTube / 2;
 
 module cup() {
     difference() {
@@ -49,16 +34,23 @@ module cup() {
         cylinder(hCupHollow + cadFix, d = dCupHollow);
     }
 }
-module tubeBore() {
-    translate([0, dCup, hCupHollow - (dHangRing + dTube) / 2])
-        rotate([90, 0, 0])
+module tube() {
+    translate([-dCup, 0, zTube])
+        rotate([90, 0, 90])
             cylinder(2 * dCup, d = dTube);
 }
 
 module protectorCup() {
-    difference() {
+    module switchCover() {
+        cube([4*lWall + hSwitchSocket, 2*lWall + lSwitchSocket + lSwitch, 1.5 * hSwitchSocket + 2 * lWall]);
+    }
+    module bodySolid() {
         cup();
-        tubeBore();
+        switchCover();
+    }
+    difference() {
+        bodySolid();
+        tube();
         if (renderMode == CUTOFF_X) {
             translate([- 2 * dCup, - dCup, - dCup * .5])
                 cube([2 * dCup, 2 * dCup, 2 * hCup]);
@@ -69,16 +61,30 @@ module protectorCup() {
         }
     }
 }
+
+module hangRing() {
+    rRingInside = (dHangRing-wHangRing)/2;
+    translate([0,0, hMotorHangPoint + rRingInside])
+    rotate([0,90,0])
+    rotate_extrude(angle=360)
+        translate([rRingInside,0,0])
+        circle(d=wHangRing);
+}
+
 if(renderMode == COLLISION) {
     color("red", 0.5)
         intersection () {
           protectorCup();
           cadOffset(13) mirrorBallMotor();
         }
-    color("grey", 0.2)        protectorCup();
+    color("grey", 0.2)
+        protectorCup();
 } else {
     protectorCup();
 }
+
 if(renderMode != RENDER) {
     color("blue", 0.2 ) mirrorBallMotor();
+    color("gray", 0.2 ) tube();
+    color("gray", 0.2) hangRing();
 }
