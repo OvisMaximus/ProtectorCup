@@ -1,3 +1,5 @@
+renderMotor = false; // [true:render Motor; false:do not render Motor]
+
 dMotor = 47.5;
 hMotor = 57;
 
@@ -124,4 +126,4 @@ module mirrorBallMotor() {
     lift(hMotor + hGap + hBattery) hanger();
 }
 
-//mirrorBallMotor();
+if(renderMotor) mirrorBallMotor();
