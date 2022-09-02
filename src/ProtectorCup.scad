@@ -12,7 +12,7 @@ lSpace = 1.5;
 
 module endOfParameters() {};
 
-$fn = 120;
+$fn = 300;
 
 RENDER = 0;
 CUTOFF_X = 1;
