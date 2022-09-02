@@ -21,8 +21,8 @@ COLLISION = 3;
 
 dCupHollow = dMotor + 2 * lSpace;
 dCup = dCupHollow + 2 * lWall;
-hMotorHangPoint = hMotor + hGap + hBattery + hHanger - 2*dHanger;
-dHangRingInside = dHangRing - 2 *  wHangRing;
+hMotorHangPoint = hMotor + hGap + hBattery + hHanger - 2 * dHanger;
+dHangRingInside = dHangRing - 2 * wHangRing;
 hCupHollow = hMotorHangPoint + dHangRingInside + 3 * wHangRing;
 hCup = hCupHollow + lWall;
 zTube = hCupHollow - 2.5 * wHangRing - dTube / 2;
@@ -35,14 +35,32 @@ module cup() {
     }
 }
 module tube() {
-    translate([-dCup, 0, zTube])
+    translate([- dCup, 0, zTube])
         rotate([90, 0, 90])
             cylinder(2 * dCup, d = dTube);
 }
 
 module protectorCup() {
+    lSwitchSpace = lSwitchSocket + lSwitch + lSpace + lWall;
+    lSwitchCover = lWall + lSwitchSpace;
+    wSwitchSpace = 2 * lSpace + wSwitchSocket;
+    wSwitchCover = 2 * lWall + wSwitchSpace;
+    hSwitchSpace = 1.5 * hSwitchSocket + lSpace + hSwitchSocketPosition;
+    hSwitchCover = lWall + hSwitchSpace;
+
+    module positionSwitch() {
+        translate([wSwitchCover / 2, dCupHollow / 2 - lWall, 0])
+            rotate([0, 0, aSwitchSocketPosition + 90])
+                children();
+    }
     module switchCover() {
-        cube([4*lWall + hSwitchSocket, 2*lWall + lSwitchSocket + lSwitch, 1.5 * hSwitchSocket + 2 * lWall]);
+                positionSwitch()
+                    cube([lSwitchCover, wSwitchCover, hSwitchCover]);
+    }
+    module switchSpace() {
+        positionSwitch()
+            translate([-cadFix, lWall, -cadFix])
+                cube([lSwitchSpace, wSwitchSpace, hSwitchSpace]);
     }
     module bodySolid() {
         cup();
@@ -50,6 +68,7 @@ module protectorCup() {
     }
     difference() {
         bodySolid();
+        switchSpace();
         tube();
         if (renderMode == CUTOFF_X) {
             translate([- 2 * dCup, - dCup, - dCup * .5])
@@ -63,19 +82,19 @@ module protectorCup() {
 }
 
 module hangRing() {
-    rRingInside = (dHangRing-wHangRing)/2;
-    translate([0,0, hMotorHangPoint + rRingInside])
-    rotate([0,90,0])
-    rotate_extrude(angle=360)
-        translate([rRingInside,0,0])
-        circle(d=wHangRing);
+    rRingInside = (dHangRing - wHangRing) / 2;
+    translate([0, 0, hMotorHangPoint + rRingInside])
+        rotate([0, 90, 0])
+            rotate_extrude(angle = 360)
+                translate([rRingInside, 0, 0])
+                    circle(d = wHangRing);
 }
 
-if(renderMode == COLLISION) {
+if (renderMode == COLLISION) {
     color("red", 0.5)
-        intersection () {
-          protectorCup();
-          cadOffset(13) mirrorBallMotor();
+        intersection() {
+            protectorCup();
+            cadOffset(13) mirrorBallMotor();
         }
     color("grey", 0.2)
         protectorCup();
@@ -83,8 +102,8 @@ if(renderMode == COLLISION) {
     protectorCup();
 }
 
-if(renderMode != RENDER) {
-    color("blue", 0.2 ) mirrorBallMotor();
-    color("gray", 0.2 ) tube();
+if (renderMode != RENDER) {
+    color("blue", 0.2) mirrorBallMotor();
+    color("gray", 0.2) tube();
     color("gray", 0.2) hangRing();
 }
