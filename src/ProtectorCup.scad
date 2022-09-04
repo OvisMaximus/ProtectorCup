@@ -29,11 +29,11 @@ zTube = hCupHollow - 2.5 * wHangRing - dTube / 2;
 
 module cup() {
 
-        cylinder(hCup, d = dCup);
+    cylinder(hCup, d = dCup);
 }
 module hollowCup() {
     cadOffset()
-        cylinder(hCupHollow + cadFix, d = dCupHollow);
+    cylinder(hCupHollow + cadFix, d = dCupHollow);
 }
 module tube() {
     translate([- dCup, 0, zTube])
@@ -43,10 +43,10 @@ module tube() {
 
 module roofedCover(size) {
     hRoof = sqrt(2 * size.x * size.x);
-    translate([0,size.y,size.z - cadFix])
-        rotate([90, 0,0])
+    translate([0, size.y, size.z - cadFix])
+        rotate([90, 0, 0])
             linear_extrude(size.y)
-                polygon([[size.x,0], [0,0], [0,hRoof]]);
+                polygon([[size.x, 0], [0, 0], [0, hRoof]]);
     cube(size);
 }
 
@@ -64,34 +64,34 @@ module protectorCup() {
                 children();
     }
     module switchCover() {
-                positionSwitch()
-                    roofedCover([lSwitchCover, wSwitchCover, hSwitchCover]);
+        positionSwitch()
+        roofedCover([lSwitchCover, wSwitchCover, hSwitchCover]);
     }
     module switchSpace() {
         positionSwitch()
-            translate([-cadFix, lWall, -cadFix])
-                roofedCover([lSwitchSpace, wSwitchSpace, hSwitchSpace]);
+        translate([- cadFix, lWall, - cadFix])
+            roofedCover([lSwitchSpace, wSwitchSpace, hSwitchSpace]);
     }
     lMountSpace = lMount + lSpace + lWall;
     lMountCover = lMountSpace + lWall;
-    wMountSpace = wMount + 2*lSpace;
-    wMountCover = wMountSpace + 2* lWall;
-    hMountSpace = hMount + lSpace + 0.5* hSwitchSocket;
+    wMountSpace = wMount + 2 * lSpace;
+    wMountCover = wMountSpace + 2 * lWall;
+    hMountSpace = hMount + lSpace;
     hMountCover = hMountSpace + lWall;
     module positionMountCover(aPosition) {
-         rotate([0, 0, aPosition])
-             translate([dCupHollow / 2 -lWall, 0, 0])
+        rotate([0, 0, aPosition])
+            translate([dCupHollow / 2 - lWall, 0, 0])
                 children();
     }
     module mountCover(aPosition) {
         positionMountCover(aPosition)
-            translate([-lWall,-wMountCover/2,0])
-                roofedCover([lMountCover, wMountCover, hMountCover]);
+        translate([- lWall, - wMountCover / 2, 0])
+            roofedCover([lMountCover, wMountCover, hMountCover]);
     }
     module mountSpace(aPosition) {
         positionMountCover(aPosition)
-        translate([-cadFix-lWall,-wMountSpace/2,-cadFix])
-            roofedCover([lMountSpace, wMountSpace, hMountSpace]);
+        translate([- cadFix - lWall, - wMountSpace / 2, - cadFix])
+            cube([lMountSpace, wMountSpace, hMountSpace]);
     }
     module bodySolid() {
         cup();
