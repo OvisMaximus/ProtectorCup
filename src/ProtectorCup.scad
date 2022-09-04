@@ -9,6 +9,7 @@ dTube = 15.2;
 
 lWall = 0.8;
 lSpace = 1.5;
+lMountSpace = 5;
 
 module endOfParameters() {};
 
@@ -76,7 +77,7 @@ module protectorCup() {
     lMountCover = lMountSpace + lWall;
     wMountSpace = wMount + 2 * lSpace;
     wMountCover = wMountSpace + 2 * lWall;
-    hMountSpace = hMount + lSpace;
+    hMountSpace = hMount + lSpace + lMountSpace;
     hMountCover = hMountSpace + lWall;
     module positionMountCover(aPosition) {
         rotate([0, 0, aPosition])
